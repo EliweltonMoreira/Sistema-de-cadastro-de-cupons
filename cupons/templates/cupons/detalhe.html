@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="card">
+                    <ol class="breadcrumb card-header">
+                        <li class="breadcrumb-item"><a href="/cupom">Cupons</a></li>
+                        <li class="breadcrumb-item active">Detalhe</li>
+                    </ol>
+
+                    <div class="card-body">
+                        <p><b>Código: </b>{{cupom.codigo}}</p>
+                        <p><b>Descrição: </b>{{cupom.descricao}}</p>
+                        <p><b>Valor: </b>R$ {{cupom.valor}}</p>
+                        <p><b>Data de Expiração: </b>{{cupom.dataExpiracao}}</p>
+                        <p><b>Data de Uso: </b>{% if cupom.dataUso %}{{cupom.dataUso}}{% else %}Cupom não utilizado!{% endif %}</p>
+                        <p><b>Situação: </b>{{cupom.situacao}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

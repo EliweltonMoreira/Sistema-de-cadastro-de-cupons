@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="card">
+
+                    <ol class="breadcrumb card-header">
+                        <li class="breadcrumb-item active">Cupons</li>
+                    </ol>
+
+                    <div class="card-body">
+                        <form method="GET">
+                            <div class="form-group">
+                                <label for="filter">Filtrar por situação:</label>
+                                <select name="filter" id="filter">
+                                    <option value="Ativo">Cupons ativos</option>
+                                    <option value="Utilizado">Cupons utilizados</option>
+                                    <option value="Expirado">Cupons expirados</option>
+                                </select>
+                                <button>Filtrar</button>
+                            </div>
+                        </form>
+
+                        <form method="GET">
+                            <span>Pesquisar cupons que expiram entre:</span>
+                            <div>
+                                <label for="dataInicio">Data de Início:</label>
+                                <input type="date" name="dataInicio" id="dataInicio" required>
+                            </div>
+                            <div>
+                                <label for="dataFim">Data Final:</label>
+                                <input type="date" name="dataFim" id="dataFim" required>
+                            </div>
+                            <button>Pesquisar</button>
+                        </form>
+                        <br>
+
+                        <p>
+                            <a class="btn btn-info" href="/cupom/adicionar">Adicionar</a>
+                        </p>
+
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Código</th>
+                                    <th>Valor</th>
+                                    <th>Data Expiração</th>
+                                    <th>Situação</th>
+                                    <th>Ação</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for cupom in cupons %}
+                                {% if cupom.situacao == 'Ativo' %}
+                                <tr>
+                                {% elif cupom.situacao == 'Expirado' %}
+                                <tr class="table-danger">
+                                {% else %}
+                                <tr class="table-success">
+                                {% endif %}
+                                    <th scope="row">{{cupom.codigo}}</th>
+                                    <td>R$ {{cupom.valor}}</td>
+                                    <td>{{cupom.dataExpiracao}}</td>
+                                    <td>{{cupom.situacao}}</td>
+                                    <td>
+                                        {% if cupom.situacao == 'Ativo' %}
+                                        <a class="btn btn-info" href="/cupom/usar/{{cupom.codigo}}">Usar</a>
+                                        <a class="btn btn-warning" href="/cupom/expirar/{{cupom.codigo}}">Expirar</a>
+                                        {% elif cupom.situacao == 'Utilizado' %}
+                                        <a class="btn btn-light" href="/cupom/usar/{{cupom.codigo}}">Ativar</a>
+                                        {% endif %}
+                                        <a class="btn btn-dark" href="/cupom/detalhe/{{cupom.codigo}}">Detalhe</a>
+                                        {% if cupom.situacao == 'Ativo' or cupom.situacao == 'Utilizado' %}
+                                        <a class="btn btn-dark" href="/cupom/editar/{{cupom.codigo}}">Editar</a>
+                                        {% endif %}
+                                        <a class="btn btn-danger" href="javascript:(confirm('Deletar esse registro?') ? window.location.href='/cupom/deletar/{{cupom.codigo}}' : false)">Deletar</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
